@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pizzaapp/screens/homepage.dart';
+import 'package:pizzaapp/storage/user_storage.dart';
 import 'package:pizzaapp/utils/constants/text_constants.dart';
 
-void main() {
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await UserPreferences.init();
+  
   runApp(const MyApp());
 }
 
@@ -17,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(),
+      home: UserPreferences.isLoggedIn()? MyHomePage():  MyHomePage(),
     );
   }
 }

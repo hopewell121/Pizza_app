@@ -8,10 +8,37 @@ import 'package:pizzaapp/utils/constants/image_constants.dart';
 
 import 'package:pizzaapp/widgets/textstyle.dart';
 
-class PizzaCard extends StatelessWidget {
+class PizzaCard extends StatefulWidget {
   final PizzaModel model;
   const PizzaCard({super.key, required this.model});
 
+  @override
+  State<PizzaCard> createState() => _PizzaCardState();
+}
+
+class _PizzaCardState extends State<PizzaCard> {
+  bool isfav = false; // variable to toggle the color
+
+
+// A method to toggle ot change the color
+
+  void togglefa (){
+    setState(() {
+      isfav = !isfav;
+    });
+  }
+
+  // Methid to add items to cart
+
+  void addItemToCart(){
+    setState(() {
+      pizzaCartList.add(widget.model);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Item successfuly added to card')));
+
+    // print('Cart lenght: ${pizzaCartList.length.toString()}');
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -20,7 +47,7 @@ class PizzaCard extends StatelessWidget {
           padding: EdgeInsets.only(top: 40),
           child: GestureDetector(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>PepperoniDetails(pizzDetails: model,)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>PepperoniDetails(pizzDetails: widget.model,)));
             },
             child: Container(
               margin: EdgeInsets.all(20),
@@ -34,7 +61,7 @@ class PizzaCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 40, bottom: 20),
-                    child: Text(model.name, style: text18(Colors.black, 15, FontWeight.w600),),
+                    child: Text(widget.model.name, style: text18(Colors.black, 15, FontWeight.w600),),
             
                   ),
                   Row(
@@ -44,14 +71,14 @@ class PizzaCard extends StatelessWidget {
                         margin: EdgeInsets.only(left: 10),
                         padding: EdgeInsets.only(bottom: 30),
                         child: Image.asset(ImageConstants.emoji1)),
-                      Text(model.description, style: AppTextStyles.text40,),
+                      Text(widget.model.description, style: AppTextStyles.text40,),
                       
                     ],
                   ),
             
                   Container(
                     padding: EdgeInsets.only(top: 15, ),
-                    child: Text(model.price, style: TextStyle(fontWeight: FontWeight.bold),), )
+                    child: Text('\$${widget.model.price.toStringAsFixed(0)}', style: TextStyle(fontWeight: FontWeight.bold),), )
                 ],
               ),
             ),
@@ -65,7 +92,7 @@ class PizzaCard extends StatelessWidget {
               backgroundColor: AppColors.greycolor.withValues(alpha: 0.3),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(model.image, fit: BoxFit.cover,),
+                child: Image.asset(widget.model.name, fit: BoxFit.cover,),
               )
             
             ),
@@ -73,7 +100,12 @@ class PizzaCard extends StatelessWidget {
           Positioned(
             top: 25,
             right: 15,
-            child: CustomFavIcons(size: 10,)),
+            child: GestureDetector(
+              onTap: (){
+                addItemToCart();
+                togglefa();
+              },
+              child: CustomFavIcons(size: 10, color: isfav ? AppColors.kPrimaryColor: AppColors.amberColor.withValues(alpha: 0.2),))),
 
             
             OrderNow()

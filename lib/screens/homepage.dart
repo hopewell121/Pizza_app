@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pizzaapp/screens/login_page.dart';
 
 import 'package:pizzaapp/screens/second_page.dart';
 import 'package:pizzaapp/screens/widgets/custom_button.dart';
 import 'package:pizzaapp/screens/widgets/gridview_build.dart';
+import 'package:pizzaapp/storage/user_storage.dart';
 import 'package:pizzaapp/utils/constants/app_colors.dart';
 import 'package:pizzaapp/utils/constants/image_constants.dart';
 import 'package:pizzaapp/utils/constants/text_constants.dart';
@@ -19,8 +21,10 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           TextButton(
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage(),));
+            onPressed: () async{
+              // Set login to true
+              await UserPreferences.setLogin(context);
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage(),));
             }, 
             child: Text(TextConstants.skip, style: TextStyle(color: Colors.black),
             ),)
@@ -49,7 +53,7 @@ class MyHomePage extends StatelessWidget {
                       child: Image.asset(ImageConstants.pizza)),
                     GestureDetector(
                       onTap: () {
-                        
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SecondPage()));
                       },
                       child: Text(TextConstants.forYou, 
                       style:text18(AppColors.blackColor,25,
@@ -81,12 +85,17 @@ class MyHomePage extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.only(bottom: 30, top: 40),
                       child: MyButton(
-                        text: TextConstants.signUpWithEmail, color: AppColors.amberColor, onPressed: (){},
+                        text: TextConstants.signUpWithEmail, color: AppColors.amberColor, onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+            }, 
+                        
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(bottom: 50),
-                      child: MyButton(text: TextConstants.signUpWithGoogle, color: AppColors.yellowColor, onPressed: (){},))
+                      child: MyButton(
+                     
+                        text: TextConstants.signUpWithGoogle, color: AppColors.yellowColor, onPressed: (){},))
                   ],
                 ),
               )

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pizzaapp/data/pizza_data.dart';
+import 'package:pizzaapp/screens/cart_screen.dart';
 import 'package:pizzaapp/screens/pizza_container.dart';
 import 'package:pizzaapp/screens/widgets/customz_fav_icons.dart';
+import 'package:pizzaapp/storage/user_storage.dart';
 import 'package:pizzaapp/utils/constants/app_colors.dart';
 import 'package:pizzaapp/utils/constants/image_constants.dart';
 import 'package:pizzaapp/utils/constants/text_constants.dart';
@@ -10,9 +12,27 @@ import 'package:pizzaapp/widgets/textstyle.dart';
 
 
 
-class SecondPage extends StatelessWidget {
+class SecondPage extends StatefulWidget {
   const SecondPage({super.key});
 
+  @override
+  State<SecondPage> createState() => _SecondPageState();
+}
+
+class _SecondPageState extends State<SecondPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    clearPref();
+    
+  }
+
+
+
+  clearPref(){
+    UserPreferences.logout();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar:
@@ -37,7 +57,23 @@ class SecondPage extends StatelessWidget {
               Icon(Icons.keyboard_arrow_down),
             ],
           ),
-          CustomFavIcons()
+          // CustomFavIcons(),
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CartScreen()));
+                },
+                child: CustomFavIcons(),
+              ),
+
+              Positioned(child: CircleAvatar(
+                    radius: 10,
+                    backgroundColor: AppColors.yellowColor,
+                    child: Text('${pizzaCartList.length}',
+                   )))
+            ],
+          )
         ],
       ),
     ),
@@ -73,10 +109,6 @@ class SecondPage extends StatelessWidget {
       
     );
   }
-
-
-
-
 
           Widget _searchSection(){
           return Padding(
@@ -130,14 +162,6 @@ class SecondPage extends StatelessWidget {
           );
         }
 
-
-
-
-
-
-
-
-
   Stack _buildpizzaladysection() {
     return Stack(
         children: [
@@ -175,7 +199,8 @@ class SecondPage extends StatelessWidget {
                Image.asset(ImageConstants.fire),
                Text(TextConstants.eat, style: AppTextStyles.text17,),
                SizedBox(width: 25,),
-               Image.asset( ImageConstants.tomato)
+               Image.asset( ImageConstants.tomato),
+               Text('hello', style: TextStyle(),)
              ],
             ),
                     
@@ -210,11 +235,6 @@ class SecondPage extends StatelessWidget {
         ],
       );
   }
-
-  //pizza card
-  
- 
-
 }
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pizzaapp/data/pizza_data.dart';
+import 'package:pizzaapp/screens/selected_icon.dart';
 import 'package:pizzaapp/utils/constants/app_colors.dart';
 import 'package:pizzaapp/utils/constants/image_constants.dart';
 import 'package:pizzaapp/utils/constants/text_constants.dart';
@@ -14,18 +15,42 @@ class PepperoniDetails extends StatefulWidget {
 }
 
 class _PepperoniDetailsState extends State<PepperoniDetails> {
+  int? selectedIndex;
+
+  // final List <String> items =List.generate(3, (index){
+  //   return 'items ${index + 1}';
+  // });
+
+  final List <String> items = List.generate(3, (index)=>'${index + 1 }');
   int _counter = 1;
+  bool isLoading = false;
+  bool isbutton = false;
+  bool isbutton1 = false;
+  bool isbutton2 = false;
+
 
 
   
+  //  void setLoader(){
+  //   setState(() {
+  //     isLoading = true;
+  //   });
+  //  }
+
+  //  void stopLoader(){
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  //  }
 
   void incrementCounter(){
     setState(() {
       _counter++;
+
       
     });
 
-    
+    // setLoader();
   }
 
     void decrementCounter(){
@@ -36,7 +61,7 @@ class _PepperoniDetailsState extends State<PepperoniDetails> {
       
     });
 
-    
+    // stopLoader();
   }
 
   void itemPrice(){
@@ -53,6 +78,7 @@ class _PepperoniDetailsState extends State<PepperoniDetails> {
  
   @override
   Widget build(BuildContext context) {
+    double totalPrice = _counter * widget.pizzDetails.price;
     return Scaffold(
       backgroundColor:const Color.fromARGB(255, 246, 245, 245),
       body: Stack(
@@ -238,13 +264,13 @@ class _PepperoniDetailsState extends State<PepperoniDetails> {
                           padding: const EdgeInsets.only(top: 10),
                           child: Text(TextConstants.dollarsSign, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
                         ),
-                        Text(widget.pizzDetails.price, style: AppTextStyles.text50,)
+                        Text('\$${totalPrice.toStringAsFixed(2)}', style: AppTextStyles.text50,)
                       ],
                     ),
                   ),
                   SizedBox(height: 20,),
               
-                  Container(
+                 isLoading? CircularProgressIndicator(): Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: MaterialButton(
                       shape: RoundedRectangleBorder(
@@ -321,15 +347,62 @@ class _PepperoniDetailsState extends State<PepperoniDetails> {
           Positioned(
             top: 435,
             left: 110,
-            child: _sizeIcon('S', AppColors.circleavaterColor,)),
+            child: TextButton(
+              style: TextButton.styleFrom(
+                 padding: EdgeInsets.symmetric(horizontal: 10),
+                  minimumSize: Size(40, 40),
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+               
+        ),
+        backgroundColor: isbutton? AppColors.kPrimaryColor: AppColors.circleavaterColor
+              ),
+              onPressed: () {
+                setState(() {
+                  isbutton = !isbutton;
+                });
+              },
+
+
+              child: Text('S', style: TextStyle(fontSize: 22, color: Colors.black),))),
             Positioned(
               top: 450,
               left: 200,
-              child: _sizeIcon('M', AppColors.yellowColor)),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  minimumSize: Size(40, 40),
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),         
+                    ),
+                     backgroundColor: isbutton1? AppColors.kPrimaryColor: AppColors.circleavaterColor
+                ),
+                onPressed: () {
+                  setState(() {
+                    isbutton1 = !isbutton1;
+                  });
+                  
+                },
+                child: Text('M', style: TextStyle(fontSize: 22, color: Colors.black),))),
+                
               Positioned(
                 top: 435,
                 left: 290,
-                child: _sizeIcon('L', AppColors.circleavaterColor)),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  minimumSize: Size(40, 40),
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),         
+                    ),
+                     backgroundColor: isbutton2? AppColors.kPrimaryColor: AppColors.circleavaterColor
+                ),
+                onPressed: () {
+                  setState(() {
+                    isbutton2 = !isbutton2;
+                  });
+                },
+                  child: Text('L' , style: TextStyle(fontSize: 22, color: Colors.black),))),
 
 
                 
@@ -348,7 +421,12 @@ class _PepperoniDetailsState extends State<PepperoniDetails> {
                 borderRadius: BorderRadius.circular(15)
               ),
               padding: EdgeInsets.symmetric(vertical: 7, horizontal: 7),
-              child: Icon(Icons.favorite_outline, size: 30,)
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)
+                  =>SelectedColor()));
+                },
+                child: Icon(Icons.favorite_outline, size: 30,))
             )
             ),
 
@@ -460,7 +538,7 @@ class _PepperoniDetailsState extends State<PepperoniDetails> {
         backgroundColor: color, 
       ),
       onPressed: (){}, 
-    child: Text(text, style: TextStyle(fontSize: 20),),);
+    child: Text(text, style: TextStyle(fontSize: 20,),),);
   }
 }
 
